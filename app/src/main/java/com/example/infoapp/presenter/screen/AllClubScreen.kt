@@ -8,14 +8,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.infoapp.R
+import com.example.infoapp.data.CategoryData
 import com.example.infoapp.data.ClubData
 import com.example.infoapp.databinding.ActivityAllClubBinding
+import com.example.infoapp.presenter.adapter.CategoryAdapter
 import com.example.infoapp.presenter.adapter.ClubAdapter
 
 class AllClubScreen : Fragment(R.layout.activity_all_club) {
 
     private val binding by viewBinding(ActivityAllClubBinding::bind)
     private val adapter = ClubAdapter()
+    private val categoryAdapter = CategoryAdapter()
 
     private val data = ArrayList<ClubData>().apply {
         add(ClubData(R.drawable.antwerp, "Royal Antwerp", "Belgium"))
@@ -52,6 +55,16 @@ class AllClubScreen : Fragment(R.layout.activity_all_club) {
         add(ClubData(R.drawable.young_boys, "Young Boys", "Switzerland"))
     }
 
+    private val categories = HashSet<CategoryData>()
+
+    init {
+        data.forEach {
+            categories.add(CategoryData("All"))
+            categories.add(CategoryData(it.country))
+        }
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         initRv()
@@ -60,13 +73,31 @@ class AllClubScreen : Fragment(R.layout.activity_all_club) {
             findNavController().navigate(AllClubScreenDirections.actionAllClubScreenToDetailActivity(pos))
         }
 
-        requireActivity().window.statusBarColor = Color.parseColor("#BAD3DE")
+        requireActivity().window.statusBarColor = Color.parseColor("#ffffff")
     }
 
     private fun initRv() {
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         adapter.submitList(data)
+
+        binding.recyclerCategory.adapter = categoryAdapter
+        categoryAdapter.submitList(categories.toList())
+
+        categoryAdapter.onCLick = { it ->
+            if (it == "All") adapter.submitList(data)
+            else adapter.submitList(getClubDataByCountry(it))
+        }
+    }
+
+    private fun getClubDataByCountry(countryName: String): List<ClubData> {
+        val filteredList = mutableListOf<ClubData>()
+        for (clubData in data) {
+            if (clubData.country.equals(countryName, ignoreCase = true)) {
+                filteredList.add(clubData)
+            }
+        }
+        return filteredList
     }
 
 

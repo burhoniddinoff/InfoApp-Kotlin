@@ -31,7 +31,7 @@ class DetailScreen : Fragment(R.layout.activity_detail) {
             findNavController().navigateUp()
         }
 
-        requireActivity().window.statusBarColor = Color.parseColor("#BAD3DE")
+        requireActivity().window.statusBarColor = Color.parseColor("#FFFFFF")
 
     }
 
