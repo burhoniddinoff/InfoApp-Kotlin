@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav"
+    app:startDestination="@id/splashScreen">
+
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.example.infoapp.presenter.screen.SplashScreen"
+        android:label="SplashScreen"
+        tools:layout="@layout/activity_splash">
+        <action
+            android:id="@+id/action_splashScreen_to_allClubScreen"
+            app:popUpTo="@id/splashScreen"
+            app:popUpToInclusive="true"
+            app:destination="@id/allClubScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailActivity"
+        android:name="com.example.infoapp.presenter.screen.DetailScreen"
+        android:label="DetailActivity"
+        tools:layout="@layout/activity_detail" >
+        <argument
+            android:name="pos"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/allClubScreen"
+        android:name="com.example.infoapp.presenter.screen.AllClubScreen"
+        android:label="AllClubScreen"
+        tools:layout="@layout/activity_all_club">
+        <action
+            android:id="@+id/action_allClubScreen_to_detailActivity"
+            app:destination="@id/detailActivity" />
+    </fragment>
+
+</navigation>
